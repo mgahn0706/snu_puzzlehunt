@@ -12,14 +12,15 @@ const handler = NextAuth({
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: {
-          label: "Username",
+          label: "이메일",
           type: "text",
           placeholder: "example@snu.ac.kr",
         },
-        password: { label: "Password", type: "password" },
+        password: { label: "비밀번호", type: "password" },
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
+        // Add logic here to look up the user from the credentials supplied'
+        console.log(credentials, req);
         const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
 
         if (user) {
