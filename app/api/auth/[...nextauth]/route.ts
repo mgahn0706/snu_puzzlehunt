@@ -14,14 +14,24 @@ const handler = NextAuth({
         username: {
           label: "이메일",
           type: "text",
-          placeholder: "example@snu.ac.kr",
+          placeholder: "이메일 주소 입력 요망",
         },
         password: { label: "비밀번호", type: "password" },
       },
+
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied'
-        console.log(credentials, req);
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: credentials?.username,
+            password: credentials?.password,
+          }),
+        });
+        const user = await res.json();
+        console.log(user, credentials, req);
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
