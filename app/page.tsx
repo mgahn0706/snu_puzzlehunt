@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import { signIn, signOut } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -36,14 +39,18 @@ export default function Home() {
             />
             Deploy now
           </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
+          <button
+            className="rounded-xl border bg-yellow-300 px-12 py-4"
+            onClick={() => signIn()}
           >
-            Read our docs
-          </a>
+            LogIn
+          </button>
+          <button
+            className="rounded-xl border bg-red-300 px-12 py-4"
+            onClick={() => signOut()}
+          >
+            Log Out
+          </button>
         </div>
       </main>
       <footer className={styles.footer}>
