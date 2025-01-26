@@ -7,17 +7,21 @@ import { Input } from "../components/ui/input";
 
 const SignUpErrorMessageMapper: Record<string, string> = {
   EMAIL_EXISTS: "이미 존재하는 이메일입니다.",
-  VALIDATION_ERROR: "이메일, 비밀번호가 입력되지 않았습니다.",
+  VALIDATION_ERROR: "이름, 이메일, 비밀번호가 입력되지 않았습니다.",
   INTERNAL_SERVER_ERROR: "서버 오류가 발생했습니다.",
 };
 
 const SignUpPage = () => {
   const { toast } = useToast();
 
-  const handleSignUp = async (email: string, password: string) => {
+  const handleSignUp = async (
+    name: string,
+    email: string,
+    password: string
+  ) => {
     const result = await fetch("/api/user", {
       method: "POST",
-      body: JSON.stringify({ email, password, name: email }),
+      body: JSON.stringify({ email, password, name }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -48,11 +52,10 @@ const SignUpPage = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    console.log(data);
     const email = data.get("email") as string;
     const password = data.get("password") as string;
-    console.log(email + " " + password);
-    handleSignUp(email, password);
+    const name = data.get("name") as string;
+    handleSignUp(name, email, password);
   };
 
   return (
@@ -76,6 +79,14 @@ const SignUpPage = () => {
                 <form onSubmit={(e) => handleSubmit(e)}>
                   <div>
                     <div className="grid gap-4">
+                      <div>
+                        <Input
+                          type="text"
+                          placeholder="이름"
+                          required
+                          name="name"
+                        />
+                      </div>
                       <Input
                         type="email"
                         placeholder="아이디"

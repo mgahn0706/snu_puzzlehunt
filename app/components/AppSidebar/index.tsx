@@ -2,22 +2,25 @@
 
 import type * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
+  Bell,
+  BookHeart,
+  CircleHelp,
+  Cpu,
+  Home,
+  Info,
+  Languages,
+  Palette,
+  Scale,
+  School,
+  ScrollText,
+  Sprout,
+  Trophy,
+  Users,
 } from "lucide-react";
 
-import { NavMain } from "./NavMain";
-import { NavProjects } from "./NavProjects";
+import { NavPuzzle } from "./NavPuzzle";
 import { NavUser } from "./NavUser";
-import { TeamSwitcher } from "./TeamSwitcher";
+import { PuzzlehuntSwitcher } from "./PuzzlehuntSwitcher";
 
 import {
   Sidebar,
@@ -25,7 +28,10 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarSeparator,
 } from "../ui/sidebar";
+import { useSession } from "next-auth/react";
+import { NavMenu } from "./NavMenu";
 
 // This is sample data.
 const data = {
@@ -34,141 +40,138 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
+  puzzlehunts: [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      title: "교양의 세계",
+      logo: School,
+      subtitle: "2025 추러스 퍼즐헌트",
     },
   ],
-  navMain: [
+  puzzles: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
+      title: "언어와 문학",
+      url: "/",
+      icon: Languages,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "한국어와 문학",
+          url: "/",
         },
+      ],
+    },
+    {
+      title: "문화와 예술",
+      url: "/guide",
+      icon: Palette,
+      items: [
         {
-          title: "Starred",
-          url: "#",
+          title: "예술과 디자인",
+          url: "/",
         },
+      ],
+    },
+    {
+      title: "인간과 사회",
+      url: "#",
+      icon: Users,
+      items: [
         {
-          title: "Settings",
+          title: "심리학개론",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "자연과 기술",
       url: "#",
-      icon: Bot,
+      icon: Cpu,
       items: [
         {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "컴퓨터 과학",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "생명과 환경",
       url: "#",
-      icon: BookOpen,
+      icon: Sprout,
       items: [
         {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "생명과학",
           url: "#",
         },
       ],
     },
   ],
-  projects: [
+  menus: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "홈",
+      url: "/",
+      icon: Home,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
+      name: "퍼즐헌트가 무엇인가요?",
+      url: "/guide",
+      icon: Info,
     },
     {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      name: "규칙",
+      url: "/rules",
+      icon: Scale,
+    },
+    {
+      name: "스토리",
+      url: "/story",
+      icon: ScrollText,
+    },
+    {
+      name: "리더보드",
+      url: "/leaderboard",
+      icon: Trophy,
+    },
+    {
+      name: "FAQ",
+      url: "/faq",
+      icon: CircleHelp,
+    },
+    {
+      name: "공지사항",
+      url: "/notices",
+      icon: Bell,
+    },
+    {
+      name: "진행 후기",
+      url: "/wrap-up",
+      icon: BookHeart,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: userData } = useSession();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <PuzzlehuntSwitcher puzzlehunts={data.puzzlehunts} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavPuzzle items={data.puzzles} />
+        <SidebarSeparator />
+        <NavMenu menus={data.menus} />
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {userData && (
+          <NavUser
+            user={{
+              name: userData.user?.name || data.user.name,
+              email: userData.user?.email || data.user.email,
+              avatar: data.user.avatar,
+            }}
+          />
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
