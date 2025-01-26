@@ -2,8 +2,8 @@
 
 import { signIn } from "next-auth/react";
 import { useToast } from "../hooks/use-toast";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 
 const SignUpErrorMessageMapper: Record<string, string> = {
   EMAIL_EXISTS: "이미 존재하는 이메일입니다.",
