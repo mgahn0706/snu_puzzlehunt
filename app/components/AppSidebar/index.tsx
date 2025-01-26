@@ -32,6 +32,7 @@ import {
 } from "../ui/sidebar";
 import { useSession } from "next-auth/react";
 import { NavMenu } from "./NavMenu";
+import { NavLogin } from "./NavLogin";
 
 // This is sample data.
 const data = {
@@ -144,12 +145,13 @@ const data = {
       name: "진행 후기",
       url: "/wrap-up",
       icon: BookHeart,
+      isLocked: true,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: userData } = useSession();
+  const { data: userData, status } = useSession();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -163,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        {userData && (
+        {status === "authenticated" ? (
           <NavUser
             user={{
               name: userData.user?.name || data.user.name,
@@ -171,7 +173,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               avatar: data.user.avatar,
             }}
           />
-        )}
+        ) : status === "unauthenticated" ? (
+          <NavLogin />
+        ) : null}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
