@@ -2,10 +2,10 @@ import { verifyJwt } from "@/app/lib/jwt";
 import { prisma } from "@/app/lib/prisma";
 
 export async function GET(props: {
+  request: Request;
   params: {
     id: string;
   };
-  request: Request;
 }) {
   const accessToken = props.request.headers.get("authorization");
 
