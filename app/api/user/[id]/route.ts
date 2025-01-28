@@ -1,11 +1,13 @@
 import { verifyJwt } from "@/app/lib/jwt";
 import { prisma } from "@/app/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const accessToken = request.headers.get("authorization");
+export async function GET(props: {
+  params: {
+    id: string;
+  };
+  request: Request;
+}) {
+  const accessToken = props.request.headers.get("authorization");
 
   if (!accessToken || !verifyJwt(accessToken.split(" ")[1])) {
     return new Response(JSON.stringify({ error: "No Authorization" }), {
@@ -13,7 +15,7 @@ export async function GET(
     });
   }
   // Parse the query parameter from the request URL
-  const id = await Number(params.id);
+  const id = await Number(props.params.id);
 
   // Validate the query parameter
   if (!id) {
