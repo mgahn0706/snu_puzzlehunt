@@ -6,23 +6,39 @@ import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/app/hooks/use-toast";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const email = data.get("email") as string;
     const password = data.get("password") as string;
 
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl: "/",
+      redirect: false,
     });
+
+    if (result?.status === 401) {
+      toast({
+        title: "로그인 실패",
+        description: "아이디 또는 비밀번호가 일치하지 않습니다.",
+        type: "foreground",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    router.push("/");
   };
 
   return (

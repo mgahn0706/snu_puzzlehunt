@@ -11,7 +11,7 @@ const handler = NextAuth({
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: {
+        email: {
           label: "이메일",
           type: "text",
           placeholder: "이메일 주소 입력 요망",
@@ -26,12 +26,12 @@ const handler = NextAuth({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: credentials?.username,
+            username: credentials?.email,
             password: credentials?.password,
           }),
         });
         const user = await res.json();
-        console.log(user, credentials, req);
+        console.log("THIS IS REQ", user, credentials, req);
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT

@@ -27,8 +27,6 @@ const SignUpPage = () => {
       },
     });
 
-    console.log(result);
-
     if (!result.ok) {
       const errorCode = await result.json().then((data) => data.code);
 

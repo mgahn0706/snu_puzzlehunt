@@ -16,23 +16,5 @@ model User {
   email    String  @unique
   name     String?
   password String
-  teamId   Int?
-  team     Team?   @relation(fields: [teamId], references: [id])
-
-}
-
-model Team {
-  id       Int     @id @default(autoincrement())
-  name     String
-  members  User[]
-  solvedPuzzles Puzzle[] 
-}
-
-model Puzzle {
-  id          Int     @id @default(autoincrement())
-  title       String
-  answer      String
-
-  solvedTeams Team[]
-
+  solvedPuzzles String[] @default([])
 }
