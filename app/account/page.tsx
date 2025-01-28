@@ -15,6 +15,8 @@ import {
 } from "../components/ui/sidebar";
 import { Input } from "../components/ui/input";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { Badge } from "../components/ui/badge";
 
 export default function AccountPage() {
   const { data } = useSession();
@@ -40,9 +42,23 @@ export default function AccountPage() {
           <section className="py-4 px-4 bg-base-200 rounded-xl">
             <div className="container max-w-3xl">
               <span className="text-lg font-medium">
-                안녕하세요, {data?.user?.name} 여러분!
+                Team {data?.user.name}
               </span>
             </div>
+          </section>
+          <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2">
+            <span className="text-lg font-medium">팀원</span>
+            <Badge variant="secondary">{data?.user.memberNames.length}</Badge>
+
+            {data?.user.memberNames.map((member) => (
+              <span key={member}>{member}</span>
+            ))}
+          </section>
+          <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2">
+            <span className="text-lg font-medium">푼 문제</span>
+            <Badge variant="secondary">
+              {data?.user.solvedPuzzleIds.length}
+            </Badge>
           </section>
         </div>
       </SidebarInset>

@@ -9,6 +9,8 @@ declare module "next-auth" {
       name: string;
       email: string;
       accessToken: string;
+      memberNames: string[];
+      solvedPuzzleIds: string[];
     };
   }
 }

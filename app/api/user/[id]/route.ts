@@ -6,13 +6,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const accessToken = request.headers.get("authorization");
-  if (!accessToken || !verifyJwt(accessToken)) {
+
+  if (!accessToken || !verifyJwt(accessToken.split(" ")[1])) {
     return new Response(JSON.stringify({ error: "No Authorization" }), {
       status: 401,
     });
   }
   // Parse the query parameter from the request URL
-  const id = Number(params.id);
+  const id = await Number(params.id);
 
   // Validate the query parameter
   if (!id) {
