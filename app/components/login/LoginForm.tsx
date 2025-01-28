@@ -54,10 +54,9 @@ export function LoginForm({
                 </p>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">아이디</Label>
+                <Label htmlFor="email">팀 아이디</Label>
                 <Input
                   id="email"
-                  type="email"
                   name="email"
                   placeholder="example@snu.ac.kr"
                   required
@@ -73,9 +72,9 @@ export function LoginForm({
                 로그인
               </Button>
               <div className="text-center text-sm">
-                아직 계정이 없나요?{" "}
+                아직 팀 계정이 없나요?{" "}
                 <a href="/signup" className="underline underline-offset-4">
-                  회원가입
+                  팀 등록
                 </a>
               </div>
             </div>

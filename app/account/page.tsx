@@ -40,7 +40,7 @@ export default function AccountPage() {
           <section className="py-4 px-4 bg-base-200 rounded-xl">
             <div className="container max-w-3xl">
               <span className="text-lg font-medium">
-                안녕하세요, {data?.user?.name}님
+                안녕하세요, {data?.user?.name} 여러분!
               </span>
             </div>
           </section>

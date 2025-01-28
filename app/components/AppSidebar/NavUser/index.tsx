@@ -80,8 +80,7 @@ export function NavUser({
                   router.push("/account");
                 }}
               >
-                <BadgeCheck />
-                계정
+                <BadgeCheck />팀 계정
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

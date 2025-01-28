@@ -6,8 +6,8 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 
 const SignUpErrorMessageMapper: Record<string, string> = {
-  EMAIL_EXISTS: "이미 존재하는 이메일입니다.",
-  VALIDATION_ERROR: "이름, 이메일, 비밀번호가 입력되지 않았습니다.",
+  EMAIL_EXISTS: "이미 존재하는 아이디입니다.",
+  VALIDATION_ERROR: "이름, 아이디, 비밀번호가 입력되지 않았습니다.",
   INTERNAL_SERVER_ERROR: "서버 오류가 발생했습니다.",
 };
 
@@ -23,6 +23,7 @@ const SignUpPage = () => {
       method: "POST",
       body: JSON.stringify({ email, password, name }),
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
     });
@@ -53,6 +54,27 @@ const SignUpPage = () => {
     const email = data.get("email") as string;
     const password = data.get("password") as string;
     const name = data.get("name") as string;
+
+    if (!name || !email || !password) {
+      toast({
+        title: "회원가입 실패",
+        description: "이름, 아이디, 비밀번호가 입력되지 않았습니다.",
+        type: "foreground",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== data.get("password-confirm")) {
+      toast({
+        title: "회원가입 실패",
+        description: "비밀번호 확인이 일치하지 않습니다.",
+        type: "foreground",
+        variant: "destructive",
+      });
+      return;
+    }
+
     handleSignUp(name, email, password);
   };
 
@@ -69,7 +91,7 @@ const SignUpPage = () => {
                     alt="logo"
                     className="mb-7 h-10 w-auto"
                   />
-                  <p className="mb-2 text-2xl font-bold">퍼즐헌트 등록</p>
+                  <p className="mb-2 text-2xl font-bold">퍼즐헌트 팀 등록</p>
                   <p className="text-muted-foreground">
                     추러스 퍼즐헌트에 가입해보세요.
                   </p>
@@ -80,13 +102,12 @@ const SignUpPage = () => {
                       <div>
                         <Input
                           type="text"
-                          placeholder="이름"
+                          placeholder="팀 이름"
                           required
                           name="name"
                         />
                       </div>
                       <Input
-                        type="email"
                         placeholder="아이디"
                         required
                         id="email"
@@ -99,6 +120,15 @@ const SignUpPage = () => {
                           required
                           id="password"
                           name="password"
+                        />
+                      </div>
+                      <div>
+                        <Input
+                          type="password"
+                          placeholder="비밀번호 확인"
+                          required
+                          id="password-confirm"
+                          name="password-confirm"
                         />
                       </div>
                       <Button type="submit" className="mt-2 w-full">

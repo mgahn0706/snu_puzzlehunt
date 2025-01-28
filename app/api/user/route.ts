@@ -20,9 +20,14 @@ export async function POST(request: Request) {
     );
   }
 
+  console.log(body);
+
   const existingUser = await prisma.user.findFirst({
     where: { email: body.email },
   });
+
+  console.log("existingUser", existingUser);
+
   if (existingUser) {
     return new Response(
       JSON.stringify({
