@@ -1,3 +1,5 @@
+"use client";
+
 import { Separator } from "@radix-ui/react-separator";
 import { AppSidebar } from "../components/AppSidebar";
 import {
@@ -11,6 +13,7 @@ import {
   SidebarInset,
   SidebarTrigger,
 } from "../components/ui/sidebar";
+import { useEffect, useState } from "react";
 
 type UsersResponse = Array<{
   name: string;
@@ -18,20 +21,24 @@ type UsersResponse = Array<{
   solvedPuzzleCount: number;
 }>;
 
-const getUsers = async () => {
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/users`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await response.json();
-  return data as UsersResponse;
-};
+export default function AccountPage() {
+  const [users, setUsers] = useState<UsersResponse>([]);
 
-export default async function AccountPage() {
-  const users = await getUsers();
+  useEffect(() => {
+    const getUsers = async () => {
+      const response = await fetch(`/api/users`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setUsers(data);
+    };
+
+    getUsers();
+  }, []);
 
   return (
     <SidebarProvider>
@@ -44,7 +51,7 @@ export default async function AccountPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>팀</BreadcrumbPage>
+                  <BreadcrumbPage>리더보드</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
