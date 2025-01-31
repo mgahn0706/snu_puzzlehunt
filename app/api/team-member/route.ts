@@ -20,11 +20,17 @@ export async function PUT(request: Request) {
   const id = await Number(body.id);
 
   const user = await prisma.user.update({
-    where: { id },
+    where: { id: id },
     data: {
       memberNames: body.newTeamMembers,
     },
   });
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: "User not found" }), {
+      status: 404,
+    });
+  }
 
   const { password, ...result } = user;
 

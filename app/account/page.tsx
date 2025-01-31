@@ -15,11 +15,89 @@ import {
 } from "../components/ui/sidebar";
 import { Input } from "../components/ui/input";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { MAXIMUM_MEMBERS_PER_TEAM } from "../fixtures/puzzlehunt";
+import { useToast } from "../hooks/use-toast";
+import useGetUserById from "../hooks/api/useGetUserById";
+import { X } from "lucide-react";
 
 export default function AccountPage() {
-  const { data } = useSession();
+  const { toast } = useToast();
+  const { data: session } = useSession();
+
+  const { data, refetch } = useGetUserById({ id: session?.user.id });
+
+  const handleDeleteMember = async (memberName: string) => {
+    if (!data) return;
+
+    const response = await fetch(`/api/team-member`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.user.accessToken}`,
+      },
+      body: JSON.stringify({
+        id: session?.user.id,
+        newTeamMembers: data.memberNames.filter((name) => name !== memberName),
+      }),
+    });
+
+    if (!response.ok) {
+      toast({
+        title: `${memberName} 팀원 삭제에 실패했습니다.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: `${memberName} 팀원이 삭제되었습니다.`,
+    });
+
+    refetch();
+
+    return;
+  };
+
+  const handleAddMember = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newMemberName = formData.get("newMemberName") as string;
+    if (!newMemberName) return;
+    if (!data) return;
+    if (data.memberNames.length >= MAXIMUM_MEMBERS_PER_TEAM) return;
+
+    const response = await fetch(`/api/team-member`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.user.accessToken}`,
+      },
+      body: JSON.stringify({
+        id: session?.user.id,
+        newTeamMembers: [...data.memberNames, newMemberName],
+      }),
+    });
+
+    if (!response.ok) {
+      toast({
+        title: `${newMemberName} 팀원 추가에 실패했습니다.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: `${newMemberName} 팀원이 추가되었습니다.`,
+    });
+
+    refetch();
+
+    return;
+  };
 
   return (
     <SidebarProvider>
@@ -38,29 +116,58 @@ export default function AccountPage() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <section className="py-4 px-4 bg-base-200 rounded-xl">
-            <div className="container max-w-3xl">
-              <span className="text-lg font-medium">
-                Team {data?.user.name}
-              </span>
-            </div>
-          </section>
-          <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2">
-            <span className="text-lg font-medium">팀원</span>
-            <Badge variant="secondary">{data?.user.memberNames.length}</Badge>
+        {data && (
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <section className="py-4 px-4 bg-base-200 rounded-xl">
+              <div className="container max-w-3xl">
+                <span className="text-lg font-medium">Team {data?.name}</span>
+              </div>
+            </section>
+            <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2 flex-col">
+              <div className="flex gap-2">
+                <span className="text-lg font-medium">팀원</span>
+                <Badge variant="secondary">{data?.memberNames.length}</Badge>
+              </div>
+              <div className="flex w-full max-w-sm items-center space-x-2 gap-2">
+                <form onSubmit={handleAddMember} className="flex w-full gap-2">
+                  <Input
+                    placeholder="새 팀원 명"
+                    name="newMemberName"
+                    disabled={
+                      data.memberNames.length >= MAXIMUM_MEMBERS_PER_TEAM
+                    }
+                  />
+                  <Button
+                    variant="outline"
+                    type="submit"
+                    disabled={
+                      data.memberNames.length >= MAXIMUM_MEMBERS_PER_TEAM
+                    }
+                  >
+                    팀원 추가
+                  </Button>
+                </form>
+              </div>
 
-            {data?.user.memberNames.map((member) => (
-              <span key={member}>{member}</span>
-            ))}
-          </section>
-          <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2">
-            <span className="text-lg font-medium">푼 문제</span>
-            <Badge variant="secondary">
-              {data?.user.solvedPuzzleIds.length}
-            </Badge>
-          </section>
-        </div>
+              {data.memberNames.map((member) => (
+                <div key={member} className="flex items-center gap-2">
+                  <span key={member}>{member}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleDeleteMember(member)}
+                  >
+                    <X />
+                  </Button>
+                </div>
+              ))}
+            </section>
+            <section className="py-4 px-4 bg-base-200 rounded-xl flex gap-2">
+              <span className="text-lg font-medium">푼 문제</span>
+              <Badge variant="secondary">{data.solvedPuzzleIds.length}</Badge>
+            </section>
+          </div>
+        )}
       </SidebarInset>
     </SidebarProvider>
   );

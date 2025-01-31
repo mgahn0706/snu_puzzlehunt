@@ -1,0 +1,1 @@
+export const MAXIMUM_MEMBERS_PER_TEAM = 10;

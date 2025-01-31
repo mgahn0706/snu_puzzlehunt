@@ -35,7 +35,7 @@ export default function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <section className="relative overflow-hidden">
+          <section className="relative">
             <div className="absolute inset-0 overflow-hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
