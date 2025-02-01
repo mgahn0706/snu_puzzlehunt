@@ -11,7 +11,6 @@ import { Button } from "@/app/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,7 +19,6 @@ import {
 import { Input } from "@/app/components/ui/input";
 import { PUZZLES } from "@/app/fixtures/puzzles";
 import usePostSolvePuzzle from "@/app/hooks/api/usePostSolvedPuzzle";
-import { useSession } from "next-auth/react";
 
 const FormSchema = z.object({
   answer: z.string(),
@@ -28,7 +26,6 @@ const FormSchema = z.object({
 
 export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
   const puzzle = PUZZLES[2025][puzzleId];
-  const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -37,7 +34,7 @@ export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
     },
   });
 
-  const { postSolvedPuzzleId, loading } = usePostSolvePuzzle();
+  const { postSolvedPuzzleId } = usePostSolvePuzzle();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const hashedSubmittedAnswer = CryptoJS.SHA256(

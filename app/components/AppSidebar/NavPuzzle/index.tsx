@@ -30,7 +30,7 @@ export function NavPuzzle({ items }: { items: Category[] }) {
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={false}
+            defaultOpen={true}
             className="group/collapsible"
           >
             <SidebarMenuItem>
