@@ -9,7 +9,16 @@ export interface User {
 export interface Puzzle {
   id: string;
   title: string;
-  description: string;
+  flavorText: string;
+  question: string;
   hashedAnswer: string;
+  partialAnswers?: string[];
   creator: string;
+}
+
+export interface Category {
+  id: string;
+  title: string;
+  icon: React.ComponentType;
+  puzzleIds: string[];
 }

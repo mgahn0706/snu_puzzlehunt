@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import {
   Collapsible,
@@ -18,21 +18,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/app/components/ui/sidebar";
+import { Category } from "@/app/types";
+import { PUZZLES } from "@/app/fixtures/puzzles";
 
-export function NavPuzzle({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}) {
+export function NavPuzzle({ items }: { items: Category[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>퍼즐</SidebarGroupLabel>
@@ -41,7 +30,7 @@ export function NavPuzzle({
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={item.isActive}
+            defaultOpen={false}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -49,22 +38,30 @@ export function NavPuzzle({
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                  {item.items && item.items.length > 0 && (
+                  {item.puzzleIds && item.puzzleIds.length > 0 && (
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   )}
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
+                  {item.puzzleIds.map((puzzleId) => {
+                    const puzzle = PUZZLES[2025][puzzleId];
+
+                    if (!puzzle) {
+                      return null;
+                    }
+
+                    return (
+                      <SidebarMenuSubItem key={puzzle.title}>
+                        <SidebarMenuSubButton asChild>
+                          <a href={`/puzzle/${puzzle.id}`}>
+                            <span>{puzzle.title}</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    );
+                  })}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

@@ -33,6 +33,9 @@ import {
 import { useSession } from "next-auth/react";
 import { NavMenu } from "./NavMenu";
 import { NavLogin } from "./NavLogin";
+import useGetUserById from "@/app/hooks/api/useGetUserById";
+import useAvailablePuzzles from "@/app/hooks/useAvailablePuzzles";
+import { CATEGORIES, PUZZLES } from "@/app/fixtures/puzzles";
 
 // This is sample data.
 const data = {
@@ -48,63 +51,7 @@ const data = {
       subtitle: "2025 추러스 퍼즐헌트",
     },
   ],
-  puzzles: [
-    {
-      title: "언어와 문학",
-      url: "/",
-      icon: Languages,
-      items: [
-        {
-          title: "한국어와 문학",
-          url: "/",
-        },
-      ],
-    },
-    {
-      title: "문화와 예술",
-      url: "/guide",
-      icon: Palette,
-      items: [
-        {
-          title: "예술과 디자인",
-          url: "/",
-        },
-      ],
-    },
-    {
-      title: "인간과 사회",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "심리학개론",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "자연과 기술",
-      url: "#",
-      icon: Cpu,
-      items: [
-        {
-          title: "컴퓨터 과학",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "생명과 환경",
-      url: "#",
-      icon: Sprout,
-      items: [
-        {
-          title: "생명과학",
-          url: "#",
-        },
-      ],
-    },
-  ],
+
   menus: [
     {
       name: "홈",
@@ -151,7 +98,24 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: userData, status } = useSession();
+  const { data: session, status } = useSession();
+
+  const { data: userData } = useGetUserById({ id: session?.user?.id });
+
+  const { availablePuzzleIds } = useAvailablePuzzles({
+    solvedPuzzleIds: userData?.solvedPuzzleIds ?? [],
+  });
+
+  const puzzles = CATEGORIES["2025"]
+    .filter((category) =>
+      category.puzzleIds.some((id) => availablePuzzleIds.includes(id))
+    )
+    .map((category) => ({
+      ...category,
+      puzzleIds: category.puzzleIds.filter((id) =>
+        availablePuzzleIds.includes(id)
+      ),
+    }));
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -159,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <PuzzlehuntSwitcher puzzlehunts={data.puzzlehunts} />
       </SidebarHeader>
       <SidebarContent>
-        <NavPuzzle items={data.puzzles} />
+        <NavPuzzle items={puzzles} />
         <SidebarSeparator />
         <NavMenu menus={data.menus} />
       </SidebarContent>
@@ -168,8 +132,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {status === "authenticated" ? (
           <NavUser
             user={{
-              name: userData.user?.name || data.user.name,
-              email: userData.user?.email || data.user.email,
+              name: session.user?.name || data.user.name,
+              email: session.user?.email || data.user.email,
               avatar: data.user.avatar,
             }}
           />

@@ -8,7 +8,9 @@ export default function useAvailablePuzzles({
       availablePuzzleIds: ["A1"],
     };
   }
-  return ["A1", "B1"];
+  return {
+    availablePuzzleIds: ["A1, A2"],
+  };
 }
 
 // Fix this after puzzlehunt structure is finalized
