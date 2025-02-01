@@ -77,27 +77,6 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div className="flex flex-col gap-16 pb-8 pt-12 md:py-32">
-                    {integrations.map((line, i) => (
-                      <div
-                        key={i}
-                        className="flex gap-x-24 odd:-translate-x-24"
-                      >
-                        {line.map((integration) => (
-                          <div
-                            key={integration.id}
-                            className="size-24 rounded-xl border border-background bg-background shadow-xl"
-                          >
-                            <div className="h-full w-full bg-muted/20 p-4">
-                              {integration.icon}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -106,5 +85,3 @@ export default function Page() {
     </SidebarProvider>
   );
 }
-
-const integrations = [];
