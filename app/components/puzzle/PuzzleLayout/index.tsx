@@ -26,9 +26,9 @@ interface PuzzleLayoutProps {
 }
 
 export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  const { data: userData } = useGetUserById({ id: session?.user?.id });
+  const { data: userData, loading } = useGetUserById({ id: session?.user?.id });
 
   const { availablePuzzleIds } = useAvailablePuzzles({
     solvedPuzzleIds: userData?.solvedPuzzleIds ?? [],
@@ -36,7 +36,15 @@ export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
 
   const puzzle = PUZZLES[2025][id];
 
-  if (!availablePuzzleIds.includes(id)) {
+  if (status === "loading" || loading) {
+    return null;
+  }
+
+  if (
+    !availablePuzzleIds.includes(id) &&
+    status === "authenticated" &&
+    !loading
+  ) {
     redirect("/");
   }
 
@@ -67,7 +75,7 @@ export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
                 </span>
               </div>
             </section>
-            <PuzzleAnswerForm id={id} />
+            <PuzzleAnswerForm puzzleId={id} />
           </div>
           <Separator className="my-4" />
           <div className="container max-w-3xl flex flex-col gap-2">

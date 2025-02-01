@@ -8,8 +8,13 @@ export default function useAvailablePuzzles({
       availablePuzzleIds: ["A1"],
     };
   }
+  if (solvedPuzzleIds.length >= 1) {
+    return {
+      availablePuzzleIds: ["A1", "A2"],
+    };
+  }
   return {
-    availablePuzzleIds: ["A1, A2"],
+    availablePuzzleIds: [],
   };
 }
 

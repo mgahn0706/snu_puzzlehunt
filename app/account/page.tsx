@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { AppSidebar } from "../components/AppSidebar";
 import {
@@ -25,8 +26,10 @@ import { X } from "lucide-react";
 export default function AccountPage() {
   const { toast } = useToast();
   const { data: session } = useSession();
-
   const { data, refetch } = useGetUserById({ id: session?.user.id });
+
+  // Create a ref for the form element.
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleDeleteMember = async (memberName: string) => {
     if (!data) return;
@@ -57,12 +60,11 @@ export default function AccountPage() {
     });
 
     refetch();
-
-    return;
   };
 
   const handleAddMember = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const newMemberName = formData.get("newMemberName") as string;
     if (!newMemberName) return;
@@ -96,7 +98,10 @@ export default function AccountPage() {
 
     refetch();
 
-    return;
+    // Reset the form using the ref.
+    if (formRef.current) {
+      formRef.current.reset();
+    }
   };
 
   return (
@@ -129,7 +134,12 @@ export default function AccountPage() {
                 <Badge variant="secondary">{data?.memberNames.length}</Badge>
               </div>
               <div className="flex w-full max-w-sm items-center space-x-2 gap-2">
-                <form onSubmit={handleAddMember} className="flex w-full gap-2">
+                {/* Attach the ref to the form */}
+                <form
+                  ref={formRef}
+                  onSubmit={handleAddMember}
+                  className="flex w-full gap-2"
+                >
                   <Input
                     placeholder="새 팀원 명"
                     name="newMemberName"
@@ -149,9 +159,12 @@ export default function AccountPage() {
                 </form>
               </div>
 
-              {data.memberNames.map((member) => (
-                <div key={member} className="flex items-center gap-2">
-                  <span key={member}>{member}</span>
+              {data.memberNames.map((member, index) => (
+                <div
+                  key={`${member}-${index}`}
+                  className="flex items-center gap-2"
+                >
+                  <span>{member}</span>
                   <Button
                     variant="outline"
                     size="icon"

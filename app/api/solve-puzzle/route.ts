@@ -29,8 +29,6 @@ export async function POST(request: Request) {
     });
   }
 
-  const { password, ...result } = user;
-
   if (user.solvedPuzzleIds.includes(body.solvedPuzzleId)) {
     return new Response(JSON.stringify({ error: "Already solved" }), {
       status: 409,

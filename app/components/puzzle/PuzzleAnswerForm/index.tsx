@@ -19,13 +19,16 @@ import {
 } from "@/app/components/ui/form";
 import { Input } from "@/app/components/ui/input";
 import { PUZZLES } from "@/app/fixtures/puzzles";
+import usePostSolvePuzzle from "@/app/hooks/api/usePostSolvedPuzzle";
+import { useSession } from "next-auth/react";
 
 const FormSchema = z.object({
   answer: z.string(),
 });
 
-export function PuzzleAnswerForm({ id }: { id: string }) {
-  const puzzle = PUZZLES[2025][id];
+export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
+  const puzzle = PUZZLES[2025][puzzleId];
+  const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -33,6 +36,8 @@ export function PuzzleAnswerForm({ id }: { id: string }) {
       answer: "",
     },
   });
+
+  const { postSolvedPuzzleId, loading } = usePostSolvePuzzle();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const hashedSubmittedAnswer = CryptoJS.SHA256(
@@ -43,6 +48,7 @@ export function PuzzleAnswerForm({ id }: { id: string }) {
       toast({
         title: "정답입니다! 🎉",
       });
+      postSolvedPuzzleId({ puzzleId });
       return;
     }
 

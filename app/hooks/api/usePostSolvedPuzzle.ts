@@ -7,17 +7,13 @@ interface UserResponse {
   loading: boolean;
 }
 
-export default function usePostSolvePuzzle({
-  userId,
-}: {
-  userId?: number;
-}): UserResponse {
+export default function usePostSolvePuzzle(): UserResponse {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(true);
 
   const postSolvedPuzzleId = useCallback(
     async ({ puzzleId }: { puzzleId: string }) => {
-      if (!userId || !puzzleId) return;
+      if (!puzzleId) return;
       setLoading(true);
       try {
         const response = await fetch(`/api/solve-puzzle`, {
@@ -27,6 +23,10 @@ export default function usePostSolvePuzzle({
             "Content-Type": "application/json",
             Authorization: `Bearer ${session?.user.accessToken}`,
           },
+          body: JSON.stringify({
+            id: session?.user.id,
+            solvedPuzzleId: puzzleId,
+          }),
         });
         if (!response.ok) {
           throw new Error("Failed to fetch user");
@@ -37,7 +37,7 @@ export default function usePostSolvePuzzle({
         setLoading(false);
       }
     },
-    [userId, session?.user.accessToken]
+    [session?.user.accessToken]
   );
 
   return {
