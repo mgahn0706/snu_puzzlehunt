@@ -2,15 +2,13 @@
 
 import { useSession } from "next-auth/react";
 import { LoginForm } from "../components/login/LoginForm";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function SignIn() {
   const { status } = useSession();
-  const router = useRouter();
 
   if (status === "authenticated") {
-    router.push("/");
-    return;
+    redirect("/");
   }
 
   return (
