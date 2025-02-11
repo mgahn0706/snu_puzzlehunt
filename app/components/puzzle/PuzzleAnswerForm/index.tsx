@@ -24,6 +24,8 @@ const FormSchema = z.object({
   answer: z.string(),
 });
 
+const KOREAN_REGEX = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
 export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
   const puzzle = PUZZLES[2025][puzzleId];
 
@@ -40,6 +42,15 @@ export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
     const hashedSubmittedAnswer = CryptoJS.SHA256(
       data.answer.toUpperCase()
     ).toString();
+
+    const isKorean = KOREAN_REGEX.test(data.answer);
+
+    if (!isKorean) {
+      toast({
+        title: "정답은 한글로 입력해주세요! 🇰🇷",
+      });
+      return;
+    }
 
     if (hashedSubmittedAnswer === puzzle.hashedAnswer) {
       toast({

@@ -35,7 +35,11 @@ const handler = NextAuth({
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          const token = {
+            ...user,
+            expiresAt: Math.floor(Date.now() / 1000) + 1 * 24 * 60 * 60,
+          };
+          return token;
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
@@ -45,6 +49,10 @@ const handler = NextAuth({
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 1 * 24 * 60 * 60, // 1 day
+  },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {

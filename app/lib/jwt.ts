@@ -1,7 +1,7 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 const DEFAULT_SIGN_OPTION: SignOptions = {
-  expiresIn: "3d",
+  expiresIn: "1d",
 };
 
 export function signJwtAccessToken(
