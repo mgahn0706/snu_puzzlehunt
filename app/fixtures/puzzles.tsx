@@ -1,4 +1,14 @@
-import { Cpu, Languages, Palette, Sprout, Users } from "lucide-react";
+import {
+  Book,
+  Cog,
+  Cpu,
+  Globe,
+  Languages,
+  Music,
+  Palette,
+  Sprout,
+  Users,
+} from "lucide-react";
 import { Category, Puzzle } from "../types";
 
 export const PUZZLES: Record<string, Record<string, Puzzle>> = {
@@ -31,10 +41,25 @@ export const PUZZLES: Record<string, Record<string, Puzzle>> = {
 
 export const CATEGORIES: Record<string, Category[]> = {
   2025: [
-    { id: "A", title: "언어와 문학", icon: Languages, puzzleIds: ["A1", "A2"] },
-    { id: "B", title: "문화와 예술", icon: Palette, puzzleIds: ["B1", "B2"] },
-    { id: "C", title: "인간과 사회", icon: Users, puzzleIds: ["C1", "C2"] },
-    { id: "D", title: "자연과 기술", icon: Cpu, puzzleIds: ["D1", "D2"] },
-    { id: "E", title: "생명과 환경", icon: Sprout, puzzleIds: ["E1", "E2"] },
+    {
+      id: "A",
+      title: "인문대학",
+      icon: Book,
+      puzzleIds: ["A1", "A2", "A3"],
+    },
+    {
+      id: "B",
+      title: "공과대학",
+      icon: Cog,
+      puzzleIds: ["B1", "B2", "B3", "B4", "B5", "B6", "B-META"],
+    },
+    {
+      id: "C",
+      title: "음악대학",
+      icon: Music,
+      puzzleIds: ["C1", "C2", "C3", "C4", "C5", "C-META"],
+    },
+    { id: "D", title: "사회과학대학", icon: Globe, puzzleIds: ["D1", "D2"] },
+    { id: "E", title: "자연과학대학", icon: Sprout, puzzleIds: ["E1", "E2"] },
   ],
 };

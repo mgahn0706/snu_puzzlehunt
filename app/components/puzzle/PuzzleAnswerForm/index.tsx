@@ -39,18 +39,28 @@ export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
   const { postSolvedPuzzleId } = usePostSolvePuzzle();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const hashedSubmittedAnswer = CryptoJS.SHA256(
-      data.answer.toUpperCase()
-    ).toString();
+    if (!data.answer) {
+      toast({
+        title: "정답을 입력해주세요! 🤔",
+      });
+      return;
+    }
 
-    const isKorean = KOREAN_REGEX.test(data.answer);
+    const isAllLetterKorean = data.answer
+      .replace(/\s/g, "")
+      .split("")
+      .every((char) => KOREAN_REGEX.test(char));
 
-    if (!isKorean) {
+    if (!isAllLetterKorean) {
       toast({
         title: "정답은 한글로 입력해주세요! 🇰🇷",
       });
       return;
     }
+
+    const hashedSubmittedAnswer = CryptoJS.SHA256(
+      data.answer.toUpperCase().replace(/\s/g, "")
+    ).toString();
 
     if (hashedSubmittedAnswer === puzzle.hashedAnswer) {
       toast({
@@ -62,7 +72,7 @@ export function PuzzleAnswerForm({ puzzleId }: { puzzleId: string }) {
 
     if (puzzle.partialAnswers?.includes(hashedSubmittedAnswer)) {
       toast({
-        title: "Keep going! 🧠",
+        title: "정답에 근접하고 있어요! 🧠",
       });
       return;
     }

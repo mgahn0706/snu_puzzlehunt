@@ -66,12 +66,12 @@ export default function Page() {
               <div className="md:-space-x-26 container relative flex flex-col items-start md:flex-row md:items-center">
                 <div className="z-20 -mx-[calc(theme(container.padding))] w-[calc(100%+2*theme(container.padding))] shrink-0 bg-background px-[calc(theme(container.padding))] pt-32 md:w-1/2 md:bg-transparent md:pb-32">
                   <div className="flex flex-col items-start text-left">
-                    <div className="max-w-sm">
+                    <div className="max-w-lg">
                       <h6 className="mt-6 text-pretty text-sm font-semibold">
                         2025 추러스 퍼즐헌트
                       </h6>
                       <h1 className="mb-6 text-pretty text-4xl font-bold lg:text-6xl">
-                        교양의 세계
+                        학과
                       </h1>
                       <Button onClick={() => signIn()}>시작</Button>
                     </div>
