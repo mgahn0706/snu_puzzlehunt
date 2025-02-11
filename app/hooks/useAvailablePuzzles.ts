@@ -5,12 +5,12 @@ export default function useAvailablePuzzles({
 }) {
   if (solvedPuzzleIds.length === 0) {
     return {
-      availablePuzzleIds: ["A1"],
+      availablePuzzleIds: ["Z1"],
     };
   }
   if (solvedPuzzleIds.length >= 1) {
     return {
-      availablePuzzleIds: ["A1", "A2"],
+      availablePuzzleIds: ["Z1", "A1", "B1", "C1", "D1", "E1"],
     };
   }
   return {

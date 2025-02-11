@@ -1,18 +1,17 @@
-import {
-  Book,
-  Cog,
-  Cpu,
-  Globe,
-  Languages,
-  Music,
-  Palette,
-  Sprout,
-  Users,
-} from "lucide-react";
+import { Book, Cog, Globe, Music, School, Sprout } from "lucide-react";
 import { Category, Puzzle } from "../types";
 
 export const PUZZLES: Record<string, Record<string, Puzzle>> = {
   2025: {
+    Z1: {
+      id: "Z1",
+      title: "서울대학교 정문",
+      flavorText:
+        "서울대학교 정문에 도착했습니다. 새내기인 당신은 서울대학교에 입학할 생각에 마음이 설렙니다. 막상 정문에 가보니 주변에 아무 것도 없습니다. 당신은 당황했지만, 누군가가 남긴 퍼즐을 풀어 정문을 통과한 후 해야할 일을 찾으려고 합니다.",
+      hashedAnswer: "f9f2d7f8a7f6e3b7a6d",
+      creator: "안민규",
+      question: "정문을 통과한 후 해야할 것은 무엇인가요?",
+    },
     A1: {
       id: "A1",
       title: "Test Puzzle",
@@ -42,10 +41,16 @@ export const PUZZLES: Record<string, Record<string, Puzzle>> = {
 export const CATEGORIES: Record<string, Category[]> = {
   2025: [
     {
+      id: "Z",
+      title: "서울대학교 정문",
+      icon: School,
+      puzzleIds: ["Z1", "Z-META"],
+    },
+    {
       id: "A",
       title: "인문대학",
       icon: Book,
-      puzzleIds: ["A1", "A2", "A3"],
+      puzzleIds: ["A1", "A2", "A3", "A4", "A5", "A6", "A-META"],
     },
     {
       id: "B",
@@ -59,7 +64,17 @@ export const CATEGORIES: Record<string, Category[]> = {
       icon: Music,
       puzzleIds: ["C1", "C2", "C3", "C4", "C5", "C-META"],
     },
-    { id: "D", title: "사회과학대학", icon: Globe, puzzleIds: ["D1", "D2"] },
-    { id: "E", title: "자연과학대학", icon: Sprout, puzzleIds: ["E1", "E2"] },
+    {
+      id: "D",
+      title: "사회과학대학",
+      icon: Globe,
+      puzzleIds: ["D1", "D2", "D3", "D4", "D5", "D-META"],
+    },
+    {
+      id: "E",
+      title: "자연과학대학",
+      icon: Sprout,
+      puzzleIds: ["E1", "E2", "E3", "E4", "E5", "E6", "E-META"],
+    },
   ],
 };

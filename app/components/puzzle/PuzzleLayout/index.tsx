@@ -7,13 +7,15 @@ import {
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbPage,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
 } from "../../ui/breadcrumb";
 import {
   SidebarProvider,
   SidebarInset,
   SidebarTrigger,
 } from "../../ui/sidebar";
-import { PUZZLES } from "@/app/fixtures/puzzles";
+import { CATEGORIES, PUZZLES } from "@/app/fixtures/puzzles";
 import { PuzzleAnswerForm } from "../PuzzleAnswerForm";
 import useGetUserById from "@/app/hooks/api/useGetUserById";
 import useAvailablePuzzles from "@/app/hooks/useAvailablePuzzles";
@@ -59,6 +61,14 @@ export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
+                  <BreadcrumbPage>
+                    {CATEGORIES[2025].find((category) =>
+                      category.puzzleIds.includes(id)
+                    )?.title ?? "홈"}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
                   <BreadcrumbPage>{puzzle.title}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -69,8 +79,8 @@ export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
           <div className="container flex justify-between w-full gap-4">
             <section className="py-4 px-4 bg-base-200 rounded-xl">
               <div className="container max-w-3xl flex flex-col gap-4">
-                <span className="text-4xl font-medium">{puzzle.title}</span>
-                <span className="text-xl text-base-content-secondary">
+                <span className="text-xl font-medium">{puzzle.title}</span>
+                <span className="text-sm text-base-content-secondary">
                   {puzzle.flavorText}
                 </span>
               </div>
@@ -78,8 +88,10 @@ export default function PuzzleLayout({ children, id }: PuzzleLayoutProps) {
             <PuzzleAnswerForm puzzleId={id} />
           </div>
           <Separator className="my-4" />
-          <div className="container max-w-3xl flex flex-col gap-2">
-            {children}
+          <div className="container w-full flex gap-2 justify-center">
+            <div className="container max-w-3xl flex flex-col gap-4">
+              {children}
+            </div>
           </div>
         </div>
       </SidebarInset>

@@ -20,8 +20,13 @@ import {
 } from "@/app/components/ui/sidebar";
 import { Category } from "@/app/types";
 import { PUZZLES } from "@/app/fixtures/puzzles";
+import { usePathname } from "next/navigation";
 
 export function NavPuzzle({ items }: { items: Category[] }) {
+  const pathname = usePathname();
+
+  const currentCategoryId = (pathname.split("/")[2] ?? "")[0];
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>퍼즐</SidebarGroupLabel>
@@ -30,7 +35,7 @@ export function NavPuzzle({ items }: { items: Category[] }) {
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={true}
+            defaultOpen={currentCategoryId === item.id}
             className="group/collapsible"
           >
             <SidebarMenuItem>
