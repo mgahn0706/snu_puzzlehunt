@@ -71,7 +71,7 @@ export default function Page() {
                         2025 추러스 퍼즐헌트
                       </h6>
                       <h1 className="mb-6 text-pretty text-4xl font-bold lg:text-6xl">
-                        학과
+                        거울세계의 서울대
                       </h1>
                       <Button onClick={() => signIn()}>시작</Button>
                     </div>

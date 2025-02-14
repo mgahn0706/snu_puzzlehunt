@@ -46,7 +46,7 @@ const data = {
   },
   puzzlehunts: [
     {
-      title: "교양의 세계",
+      title: "거울세계의 서울대",
       logo: School,
       subtitle: "2025 추러스 퍼즐헌트",
     },
